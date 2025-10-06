@@ -1,0 +1,40 @@
+.btn {
+  position: relative;
+  padding: 5px 0;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  border-radius: 5px;
+  transform: translateX(50%);
+  right: 50%;
+  position: absolute;
+  transition: all ease 0.4s;
+}
+
+.btn:hover::after {
+  width: 7rem;
+}
+
+.btn-active {
+  position: relative;
+  padding: 5px 0;
+  overflow: hidden;
+}
+
+.btn-active::after {
+  content: "";
+  display: block;
+  width: 7rem;
+  height: 2px;
+  background-color: white;
+  border-radius: 5px;
+  transform: translateX(50%);
+  right: 50%;
+  position: absolute;
+}

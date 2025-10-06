@@ -1,0 +1,118 @@
+{
+	"info": {
+		"name": "Notes API - Practical 18",
+		"description": "RESTful API for Notes Taking Mobile App",
+		"version": "1.0.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API Documentation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/",
+					"host": ["{{base_url}}"],
+					"path": [""]
+				},
+				"description": "Get API documentation and status"
+			}
+		},
+		{
+			"name": "Get All Notes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/notes",
+					"host": ["{{base_url}}"],
+					"path": ["api", "notes"]
+				},
+				"description": "Retrieve all notes from the database"
+			}
+		},
+		{
+			"name": "Get Note by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/notes/{{note_id}}",
+					"host": ["{{base_url}}"],
+					"path": ["api", "notes", "{{note_id}}"]
+				},
+				"description": "Get a specific note by its ID"
+			}
+		},
+		{
+			"name": "Create New Note",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Sample Note\",\n  \"content\": \"This is a sample note content for testing the API\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/notes",
+					"host": ["{{base_url}}"],
+					"path": ["api", "notes"]
+				},
+				"description": "Create a new note"
+			}
+		},
+		{
+			"name": "Update Note",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Updated Note Title\",\n  \"content\": \"This is the updated content of the note\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/notes/{{note_id}}",
+					"host": ["{{base_url}}"],
+					"path": ["api", "notes", "{{note_id}}"]
+				},
+				"description": "Update an existing note"
+			}
+		},
+		{
+			"name": "Delete Note",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/notes/{{note_id}}",
+					"host": ["{{base_url}}"],
+					"path": ["api", "notes", "{{note_id}}"]
+				},
+				"description": "Delete a note by ID"
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3007",
+			"type": "string"
+		},
+		{
+			"key": "note_id",
+			"value": "replace_with_actual_note_id",
+			"type": "string"
+		}
+	]
+}

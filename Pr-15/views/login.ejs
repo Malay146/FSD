@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Portal Login</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(161, 196, 253, 0.2);
+      padding: 40px 32px;
+      text-align: center;
+      max-width: 400px;
+    }
+
+    .login-box h1 {
+      color: #a1c4fd;
+      margin-bottom: 18px;
+      font-size: 2rem;
+    }
+
+    .login-box label {
+      display: block;
+      margin: 12px 0 6px;
+      color: #333;
+      font-size: 1.1rem;
+    }
+
+    .login-box input[type="text"] {
+      width: 180px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #a1c4fd;
+      font-size: 1.1rem;
+      margin: 0 8px;
+    }
+
+    .login-box button {
+      background: #a1c4fd;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 18px;
+      transition: background 0.2s;
+    }
+
+    .login-box button:hover {
+      background: #c2e9fb;
+      color: #333;
+    }
+
+    .error {
+      color: #d32f2f;
+      font-size: 1.1rem;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-box">
+    <h1>Library Portal Login</h1>
+    <form action="/login" method="POST">
+      <label for="username">Enter your name:</label>
+      <input type="text" id="username" name="username" required>
+      <br>
+      <button type="submit">Login</button>
+    </form>
+    <% if (error) { %>
+      <div class="error">
+        <%= error %>
+      </div>
+      <% } %>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Income Total Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        .error { color: red; }
+        .result { color: green; font-weight: bold; }
+        label { display: block; margin-top: 1em; }
+        input[type="number"] { width: 200px; }
+        button { margin-top: 1em; }
+    </style>
+</head>
+<body>
+    <h2>Enter Your Income Sources</h2>
+    <% if (error) { %>
+        <div class="error"><%= error %></div>
+    <% } %>
+    <form method="POST" action="/calculate">
+        <label>
+            Income Source 1:
+            <input type="number" name="income1" min="0" step="any" value="<%= values.income1 %>" required>
+        </label>
+        <label>
+            Income Source 2:
+            <input type="number" name="income2" min="0" step="any" value="<%= values.income2 %>" required>
+        </label>
+        <button type="submit">Calculate Total Income</button>
+    </form>
+    <% if (total !== null) { %>
+        <div class="result">Total Income: <%= total %></div>
+    <% } %>
+</body>
+</html>

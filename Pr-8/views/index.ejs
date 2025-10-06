@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gym Reps Counter</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Gym Reps Counter</h1>
+    <div id="counter"><%= count %></div>
+    <div class="buttons">
+      <button id="decrement">-</button>
+      <button id="increment">+</button>
+    </div>
+    <button id="reset" class="reset-btn">Reset</button>
+  </div>
+
+  <script>
+    const initialCount = <%= count %>;
+  </script>
+  <script src="/script.js"></script>
+</body>
+</html>

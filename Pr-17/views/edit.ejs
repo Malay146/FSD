@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Student</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f6f7fb;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(102, 166, 255, 0.12);
+      padding: 32px;
+    }
+
+    h1 {
+      color: #66a6ff;
+      text-align: center;
+    }
+
+    form {
+      margin-top: 24px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #66a6ff;
+      margin-bottom: 16px;
+    }
+
+    button {
+      background: #66a6ff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+
+    button:hover {
+      background: #89f7fe;
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Edit Student</h1>
+    <form action="/edit/<%= student._id %>" method="POST">
+      <input type="text" name="name" value="<%= student.name %>" required>
+      <input type="text" name="rollNo" value="<%= student.rollNo %>" required>
+      <input type="text" name="className" value="<%= student.className %>" required>
+      <button type="submit">Update Student</button>
+    </form>
+  </div>
+</body>
+
+</html>

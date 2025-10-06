@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes API - Practical 18</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .status.connected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn.btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn.btn-danger {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+        }
+
+        .btn.btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .notes-list {
+            max-height: 500px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .note-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: transform 0.2s ease;
+        }
+
+        .note-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .note-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .note-content {
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .note-meta {
+            font-size: 0.85rem;
+            color: #999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 5px;
+        }
+
+        .response-area {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .api-docs {
+            grid-column: 1 / -1;
+        }
+
+        .endpoint-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .endpoint-method {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .endpoint-desc {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📱 Notes API Testing Interface</h1>
+            <p>Practical 18 - RESTful API for Mobile Notes App</p>
+            <div id="connectionStatus" class="status">🔄 Checking connection...</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Create Note Form -->
+            <div class="card">
+                <h2>✍️ Create New Note</h2>
+                <form id="createNoteForm">
+                    <div class="form-group">
+                        <label for="noteTitle">Note Title</label>
+                        <input type="text" id="noteTitle" placeholder="Enter note title..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="noteContent">Note Content</label>
+                        <textarea id="noteContent" placeholder="Write your note here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Create Note</button>
+                    <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear</button>
+                </form>
+                <div id="createResponse" class="response-area" style="display: none;"></div>
+            </div>
+
+            <!-- Notes List -->
+            <div class="card">
+                <h2>📚 All Notes</h2>
+                <button class="btn btn-success" onclick="loadNotes()">🔄 Refresh Notes</button>
+                <button class="btn btn-danger" onclick="deleteAllNotes()">🗑️ Delete All</button>
+                <div id="notesList" class="notes-list">
+                    <p style="text-align: center; color: #666; padding: 20px;">Click "Refresh Notes" to load notes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Documentation -->
+        <div class="card api-docs" style="margin-top: 30px;">
+            <h2>📖 API Documentation</h2>
+            <p>Available endpoints for mobile app integration:</p>
+            <div class="endpoint-list">
+                <div class="endpoint">
+                    <div class="endpoint-method">GET /api/notes</div>
+                    <div class="endpoint-desc">Retrieve all notes with pagination support</div>
+                </div>
+                <div class="endpoint">
+                    <div class="endpoint-method">GET /api/notes/:id</div>
+                    <div class="endpoint-desc">Get a specific note by ID</div>
+                </div>
+                <div class="endpoint">
+                    <div class="endpoint-method">POST /api/notes</div>
+                    <div class="endpoint-desc">Create a new note</div>
+                </div>
+                <div class="endpoint">
+                    <div class="endpoint-method">PUT /api/notes/:id</div>
+                    <div class="endpoint-desc">Update an existing note</div>
+                </div>
+                <div class="endpoint">
+                    <div class="endpoint-method">DELETE /api/notes/:id</div>
+                    <div class="endpoint-desc">Delete a note by ID</div>
+                </div>
+                <div class="endpoint">
+                    <div class="endpoint-method">DELETE /api/notes</div>
+                    <div class="endpoint-desc">Delete all notes (bulk operation)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        let currentEditId = null;
+
+        // Check API connection on load
+        document.addEventListener('DOMContentLoaded', function () {
+            checkConnection();
+            loadNotes();
+        });
+
+        // Check API connection
+        async function checkConnection() {
+            try {
+                const response = await fetch(`${API_BASE}/`);
+                const data = await response.json();
+
+                const statusEl = document.getElementById('connectionStatus');
+                if (response.ok) {
+                    statusEl.textContent = `✅ Connected to ${data.message}`;
+                    statusEl.className = 'status connected';
+                } else {
+                    throw new Error('Connection failed');
+                }
+            } catch (error) {
+                const statusEl = document.getElementById('connectionStatus');
+                statusEl.textContent = '❌ Connection Failed';
+                statusEl.className = 'status error';
+                statusEl.style.background = '#f8d7da';
+                statusEl.style.color = '#721c24';
+            }
+        }
+
+        // Create Note Form Handler
+        document.getElementById('createNoteForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const title = document.getElementById('noteTitle').value;
+            const content = document.getElementById('noteContent').value;
+            const responseEl = document.getElementById('createResponse');
+
+            if (currentEditId) {
+                await updateNote(currentEditId, title, content);
+                return;
+            }
+
+            try {
+                responseEl.style.display = 'block';
+                responseEl.textContent = '🔄 Creating note...';
+
+                const response = await fetch(`${API_BASE}/api/notes`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ title, content })
+                });
+
+                const data = await response.json();
+                responseEl.textContent = JSON.stringify(data, null, 2);
+
+                if (response.ok) {
+                    clearForm();
+                    loadNotes();
+                    responseEl.style.background = '#d4edda';
+                } else {
+                    responseEl.style.background = '#f8d7da';
+                }
+
+            } catch (error) {
+                responseEl.textContent = `Error: ${error.message}`;
+                responseEl.style.background = '#f8d7da';
+            }
+        });
+
+        // Load all notes
+        async function loadNotes() {
+            const notesListEl = document.getElementById('notesList');
+
+            try {
+                notesListEl.innerHTML = '<p style="text-align: center; padding: 20px;">🔄 Loading notes...</p>';
+
+                const response = await fetch(`${API_BASE}/api/notes`);
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    displayNotes(data.data);
+                } else {
+                    notesListEl.innerHTML = `<p style="text-align: center; color: red; padding: 20px;">Error: ${data.error || 'Failed to load notes'}</p>`;
+                }
+
+            } catch (error) {
+                notesListEl.innerHTML = `<p style="text-align: center; color: red; padding: 20px;">Error: ${error.message}</p>`;
+            }
+        }
+
+        // Display notes in the UI
+        function displayNotes(notes) {
+            const notesListEl = document.getElementById('notesList');
+
+            if (notes.length === 0) {
+                notesListEl.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">📝 No notes found. Create your first note!</p>';
+                return;
+            }
+
+            const notesHtml = notes.map(note => `
+                <div class="note-item">
+                    <div class="note-title">${escapeHtml(note.title)}</div>
+                    <div class="note-content">${escapeHtml(note.content)}</div>
+                    <div class="note-meta">
+                        <span>📅 ${new Date(note.createdAt).toLocaleDateString()}</span>
+                        <span>🔄 ${new Date(note.updatedAt).toLocaleString()}</span>
+                    </div>
+                    <div class="note-actions">
+                        <button class="btn btn-small btn-secondary" onclick="editNote('${note._id}', '${escapeHtml(note.title)}', '${escapeHtml(note.content)}')">✏️ Edit</button>
+                        <button class="btn btn-small btn-danger" onclick="deleteNote('${note._id}')">🗑️ Delete</button>
+                    </div>
+                </div>
+            `).join('');
+
+            notesListEl.innerHTML = notesHtml;
+        }
+
+        // Edit note
+        function editNote(id, title, content) {
+            currentEditId = id;
+            document.getElementById('noteTitle').value = title;
+            document.getElementById('noteContent').value = content;
+
+            const submitBtn = document.querySelector('#createNoteForm button[type="submit"]');
+            submitBtn.textContent = 'Update Note';
+            submitBtn.className = 'btn btn-success';
+
+            // Scroll to form
+            document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Update note
+        async function updateNote(id, title, content) {
+            const responseEl = document.getElementById('createResponse');
+
+            try {
+                responseEl.style.display = 'block';
+                responseEl.textContent = '🔄 Updating note...';
+
+                const response = await fetch(`${API_BASE}/api/notes/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ title, content })
+                });
+
+                const data = await response.json();
+                responseEl.textContent = JSON.stringify(data, null, 2);
+
+                if (response.ok) {
+                    clearForm();
+                    loadNotes();
+                    responseEl.style.background = '#d4edda';
+                } else {
+                    responseEl.style.background = '#f8d7da';
+                }
+
+            } catch (error) {
+                responseEl.textContent = `Error: ${error.message}`;
+                responseEl.style.background = '#f8d7da';
+            }
+        }
+
+        // Delete single note
+        async function deleteNote(id) {
+            if (!confirm('Are you sure you want to delete this note?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/notes/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    loadNotes();
+                    alert('✅ Note deleted successfully!');
+                } else {
+                    alert(`❌ Error: ${data.error || 'Failed to delete note'}`);
+                }
+
+            } catch (error) {
+                alert(`❌ Error: ${error.message}`);
+            }
+        }
+
+        // Delete all notes
+        async function deleteAllNotes() {
+            if (!confirm('⚠️ Are you sure you want to delete ALL notes? This cannot be undone!')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/notes`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    loadNotes();
+                    alert(`✅ ${data.message}`);
+                } else {
+                    alert(`❌ Error: ${data.error || 'Failed to delete notes'}`);
+                }
+
+            } catch (error) {
+                alert(`❌ Error: ${error.message}`);
+            }
+        }
+
+        // Clear form
+        function clearForm() {
+            document.getElementById('noteTitle').value = '';
+            document.getElementById('noteContent').value = '';
+            document.getElementById('createResponse').style.display = 'none';
+
+            currentEditId = null;
+            const submitBtn = document.querySelector('#createNoteForm button[type="submit"]');
+            submitBtn.textContent = 'Create Note';
+            submitBtn.className = 'btn';
+        }
+
+        // Utility function to escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+
+</html>
