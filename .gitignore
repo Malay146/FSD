@@ -1,0 +1,92 @@
+# =========================
+# Node.js / Express backend
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+debug.log
+error.log
+*.pid
+*.seed
+*.pid.lock
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by testing tools like jest
+coverage/
+.nyc_output/
+
+# =========================
+# React frontend
+# =========================
+# If your React app is in a 'client' folder:
+client/node_modules/
+client/build/
+client/.env
+client/.DS_Store
+
+# React build output (if separate)
+build/
+dist/
+
+# =========================
+# IDE / Editor files
+# =========================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# =========================
+# System files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Optional: PM2 / process manager files
+# =========================
+pids/
+*.pid
+*.seed
+*.pid.lock
+pm2.log
+
+# =========================
+# Optional: uploads/temp folders
+# =========================
+uploads/
+tmp/
+temp/
+
+# =========================
+# Optional: Firebase / Secrets
+# =========================
+firebase-debug.log
+serviceAccountKey.json
+
+# =========================
+# Optional: Testing and cache
+# =========================
+.cache/
+jest-cache/
+jest-test-results.json

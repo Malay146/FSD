@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 const transporter = nodemailer.createTransport({
 	service: "gmail",
 	auth: {
-		user: "krishilagrawal026@gmail.com", // Replace with your email
+		user: "pmalay694@gmail.com", // Replace with your email
 		pass: "lhgz unyx uycz rymk", // Replace with your app password
 	},
 });
